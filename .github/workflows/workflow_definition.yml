@@ -53,6 +53,7 @@ jobs:
       if: ${{ success() }}
       with:          
         s3_bucket: codeguru-reviewer-cicd-bugbash-0526
+        build_path: target
         
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v2

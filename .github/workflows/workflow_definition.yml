@@ -52,7 +52,6 @@ jobs:
       uses: ./.github/vijejain/cicd-actions-bugbash
       if: ${{ success() }}
       with:          
-        build_path: target # build artifact(s) directory
         s3_bucket: codeguru-reviewer-cicd-bugbash-0526
         
     - name: 'Upload Artifact'

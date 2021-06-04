@@ -2,7 +2,7 @@ import sys
 import ast
 
 def non_conformant_1(c):
-    command = 'os.system("%s")' % c
+    command = 'os.system("%s")' % c#23
     # expect finding: dangerous eval
     eval(command)
 

@@ -1,7 +1,4 @@
-# This workflow will build a 
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Python
+name: CodeGuru Reviewer
 
 on:
   push:
@@ -21,18 +18,17 @@ on:
         description: 'Test scenario tags'  
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
+   # Step 1 Add checkouts to your workflow.yml file
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
         
-#Add Python build scripts
-
-    # Extra step requied for BugBash
+    # Extra step requied for Private Beta
     - name: Checkout the action from a private repository
       uses: actions/checkout@v2
       if: ${{ always() }}
@@ -42,6 +38,7 @@ jobs:
         token: ${{ secrets.TOKEN }}
         path: ./.github/vijejain/cicd-actions-bugbash
 
+   # Step 2 Provide your AWS credentials
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       if: ${{ always() }}
@@ -50,16 +47,16 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
 
-    # Edited for BugBashdd
+    # Step 3 Add CodeGuru Reviewer Action
     - name: AWS CodeGuru Reviewer
       uses: ./.github/vijejain/cicd-actions-bugbash
       if: ${{ success() }}
       with:          
         s3_bucket: codeguru-reviewer-234
         
+    # Step 4 Upload results    
     - name: Upload review result
       if: ${{ success() }}
       uses: github/codeql-action/upload-sarif@v1
       with:
         sarif_file: codeguru-results.sarif.json 
-      
